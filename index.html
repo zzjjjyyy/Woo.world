@@ -60,7 +60,7 @@ function save(){try{localStorage.setItem('sheep-ranch-v1',JSON.stringify(sheep.m
 function valid(x,z,who){if(Math.hypot(x/6.75,z/4.1)>.985||feature(x,z))return false;for(let t of trees)if(Math.hypot(x-t[0],z-t[1])<.72*t[2])return false;for(let o of sheep)if(o!==who&&Math.hypot(x-o.root.position.x,z-o.root.position.z)<.7)return false;return true}
 function spot(x,z,w){if(valid(x,z,w))return[x,z];for(let r=.2;r<2.8;r+=.16)for(let a=0;a<6.28;a+=.36){let xx=x+Math.cos(a)*r,zz=z+Math.sin(a)*r;if(valid(xx,zz,w))return[xx,zz]}return[0,0]}
 function target(s){for(let i=0;i<25;i++){let x=(R()-.5)*11.5,z=(R()-.5)*6.6;if(valid(x,z,s))return{x,z}}return null}
-function state(s,q){s.state=q;s.timer=q==='idle'?2+R()*6:q==='graze'?2.5+R()*3:q==='jump'?1.35:0;if(q==='walk'){s.target=target(s);if(!s.target){s.state='idle';s.timer=2}}}
+function state(s,q){s.state=q;s.timer=q==='idle'?2+R()*6:q==='graze'?2.5+R()*3:q==='jump'?1.35:0;if(q==='walk'){s.target=target(s);if(!s.target){s.state='idle';s.timer=2}else{s.timer=Math.hypot(s.target.x-s.root.position.x,s.target.z-s.root.position.z)/s.speed+2.5}}}
 function choose(s){selected=s;tag.style.display=s?'block':'none';tools.style.display=s?'block':'none';document.getElementById('ring').visible=!!s;if(s)fillPanel(s);else panel.classList.remove('open')}
 const ring=new THREE.Mesh(new THREE.RingGeometry(.62,.69,48),new THREE.MeshBasicMaterial({color:'#f1d98c',transparent:true,opacity:.85,side:THREE.DoubleSide}));ring.rotation.x=-Math.PI/2;ring.position.y=.03;ring.visible=false;ring.name='ring';scene.add(ring);
 let name=document.getElementById('name'),person=document.getElementById('person'),colors=document.getElementById('colors'),choices=document.getElementById('choices');
